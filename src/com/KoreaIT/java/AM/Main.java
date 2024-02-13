@@ -29,7 +29,14 @@ public class Main {
         if(articles.size() == 0) {
           System.out.println("게시글이 없습니다.");
         }else{
-          System.out.println("게시글이 있습니다.");
+          System.out.print("번호 | ");
+          System.out.print("제목 | ");
+          System.out.println("내용");
+          for(int i = articles.size() -1; i>=0; i--){
+            System.out.printf("%d | ",articles.get(i).id);
+            System.out.printf("%s | ",articles.get(i).title);
+            System.out.println(articles.get(i).content);
+          }
         }
 
       }else if(cmd.equals("article write")){
