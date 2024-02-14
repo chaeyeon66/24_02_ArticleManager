@@ -1,5 +1,7 @@
 package com.KoreaIT.java.AM;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
@@ -51,6 +53,65 @@ public class Main {
 
         System.out.printf("%d번 글이 생성 되었습니다.\n",lastArticleId);
 
+      }else if(cmd.startsWith("article detail ")){
+        String[] cmds = cmd.split(" ");
+
+        if(cmds.length < 3){
+          System.out.println("게시글의 번호를 입력해주세요");
+          continue;
+        }
+        if(cmds.length >= 4){
+          System.out.println("다른 불필요한 정보 없이 게시글의 번호만 입력해주세요");
+          continue;
+        }
+
+        String id = cmds[2];
+        Article foundArticle = null;
+        for(int i =0; i< articles.size(); i++){
+          if(articles.get(i).id == Integer.parseInt(id)){
+            Article article = articles.get(i);
+            foundArticle = article;
+            break;
+          }
+        }
+        if(foundArticle == null){
+          System.out.printf("%s번 게시물은 존재하지 않습니다.\n",id);
+        }else{
+          System.out.printf("번호 : %d\n",foundArticle.id);
+          System.out.printf("제목 : %s\n",foundArticle.title);
+          System.out.printf("내용 : %s\n",foundArticle.content);
+          System.out.printf("날짜 : %s\n",foundArticle.today);
+        }
+
+      }else if(cmd.startsWith("article delete ")){
+        String[] cmds = cmd.split(" ");
+
+        if(cmds.length < 3){
+          System.out.println("게시글의 번호를 입력해주세요");
+          continue;
+        }
+        if(cmds.length >= 4){
+          System.out.println("다른 불필요한 정보 없이 게시글의 번호만 입력해주세요");
+          continue;
+        }
+
+        int id = Integer.parseInt(cmds[2]);
+
+        boolean found = false;
+
+        for(int i =0; i< articles.size(); i++){
+          if(articles.get(i).id == id){
+            Article delArticle = articles.get(i);
+            articles.remove(delArticle);
+            found = true;
+            System.out.printf("%d번 게시물이 삭제되었습니다.\n",id);
+            break;
+          }
+        }
+        if(!found){
+          System.out.printf("%d번 게시물은 존재하지 않습니다.\n",id);
+        }
+
       }else{
         System.out.println("존재하지 않는 명령어입니다.");
       }
@@ -66,10 +127,13 @@ class Article{
   int id;
   String title;
   String content;
+  String today;
 
   public Article(int id, String title, String content) {
     this.id = id;
     this.title =title;
     this.content = content;
+    LocalDateTime today =  LocalDateTime.now();
+    this.today = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
   }
 }
