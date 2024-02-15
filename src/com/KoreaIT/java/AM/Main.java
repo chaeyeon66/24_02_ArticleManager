@@ -73,10 +73,12 @@ public class Main {
         if(foundArticle == null){
           System.out.printf("%s번 게시물은 존재하지 않습니다.\n",id);
         }else{
+          foundArticle.increaseViewCnt();
           System.out.printf("번호 : %d\n",foundArticle.id);
           System.out.printf("제목 : %s\n",foundArticle.title);
           System.out.printf("내용 : %s\n",foundArticle.content);
           System.out.printf("날짜 : %s\n",foundArticle.regDate);
+          System.out.printf("조회수 : %s\n",foundArticle.viewCount);
         }
 
       }else if(cmd.startsWith("article delete ")){
@@ -152,14 +154,20 @@ public class Main {
 
 class Article{
   int id;
+  int viewCount;
   String title;
   String content;
   String regDate;
 
   public Article(int id, String title, String content, String regDate) {
     this.id = id;
+    this.viewCount = 0;
     this.title =title;
     this.content = content;
     this.regDate = regDate;
+  }
+
+  public  void increaseViewCnt(){
+    viewCount++;
   }
 }
