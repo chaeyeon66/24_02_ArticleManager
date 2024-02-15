@@ -5,13 +5,16 @@ import java.util.Scanner;
 import java.util.List;
 
 public class Main {
+  private static List<Article> articles;
+  static{
+    articles = new ArrayList<>();
+  }
   public static void main(String[] args) {
     System.out.println("== 프로그램 시작 ==");
+    makeTestData();
 
     Scanner sc = new Scanner(System.in);
-    List<Article> articles = new ArrayList<>();
 
-    int lastArticleId = 0;
     while(true){
       System.out.print("명령어 ) ");
       String cmd = sc.nextLine().trim();
@@ -38,16 +41,16 @@ public class Main {
         }
 
       }else if(cmd.equals("article write")){
-        lastArticleId++;
+        int id = articles.size() + 1;
         String regDate = Util.getNowDateStr();
         System.out.print("제목 : ");
         String title = sc.nextLine();
         System.out.print("내용 : ");
         String content = sc.nextLine();
-        Article article = new Article(lastArticleId, title, content, regDate);
+        Article article = new Article(id, title, content, regDate);
         articles.add(article);
 
-        System.out.printf("%d번 글이 생성 되었습니다.\n",lastArticleId);
+        System.out.printf("%d번 글이 생성 되었습니다.\n",id);
 
       }else if(cmd.startsWith("article detail ")){
         String[] cmds = cmd.split(" ");
@@ -150,6 +153,13 @@ public class Main {
 
     System.out.println("== 프로그램 종료 ==");
   }
+
+  private static void makeTestData() {
+    System.out.println("게시글 테스트 데이터를 생성합니다.");
+    articles.add(new Article(1,"t1","b1",Util.getNowDateStr(),11));
+    articles.add(new Article(2,"t2","b2",Util.getNowDateStr(),12));
+    articles.add(new Article(3,"t3","b3",Util.getNowDateStr(),436));
+  }
 }
 
 class Article{
@@ -160,11 +170,15 @@ class Article{
   String regDate;
 
   public Article(int id, String title, String content, String regDate) {
+    this(id, title, content, regDate, 0);
+  }
+
+  public Article(int id, String title, String content, String regDate, int viewCount) {
     this.id = id;
-    this.viewCount = 0;
     this.title =title;
     this.content = content;
     this.regDate = regDate;
+    this.viewCount = viewCount;
   }
 
   public  void increaseViewCnt(){
