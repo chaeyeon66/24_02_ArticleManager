@@ -1,7 +1,5 @@
 package com.KoreaIT.java.AM;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
@@ -32,10 +30,10 @@ public class Main {
           System.out.println("게시글이 없습니다.");
         }else{
           System.out.print("번호 | ");
-          System.out.print("제목");
+          System.out.print("제목\n");
           for(int i = articles.size() -1; i>=0; i--){
             System.out.printf("%d | ",articles.get(i).id);
-            System.out.printf("%s",articles.get(i).title);
+            System.out.printf("%s \n",articles.get(i).title);
           }
         }
 
@@ -107,6 +105,38 @@ public class Main {
         }else{
           articles.remove(foundArticle);
           System.out.printf("%d번 게시물이 삭제되었습니다.\n",id);
+        }
+      }else if(cmd.startsWith("article modify ")){
+        String[] cmds = cmd.split(" ");
+
+        if(cmds.length < 3){
+          System.out.println("게시글의 번호를 입력해주세요");
+          continue;
+        }
+        if(cmds.length >= 4){
+          System.out.println("다른 불필요한 정보 없이 게시글의 번호만 입력해주세요");
+          continue;
+        }
+
+        String id = cmds[2];
+        Article foundArticle = null;
+        for(int i =0; i< articles.size(); i++){
+          if(articles.get(i).id == Integer.parseInt(id)){
+            Article article = articles.get(i);
+            foundArticle = article;
+            break;
+          }
+        }
+        if(foundArticle == null){
+          System.out.printf("%s번 게시물은 존재하지 않습니다.\n",id);
+        }else{
+          System.out.print("제목 : ");
+          String title = sc.nextLine();
+          System.out.print("내용 : ");
+          String content = sc.nextLine();
+          foundArticle.title = title;
+          foundArticle.content = content;
+          System.out.printf("%s번 게시물이 수정되었습니다.\n",id);
         }
 
       }else{
