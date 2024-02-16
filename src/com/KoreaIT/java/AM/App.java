@@ -140,21 +140,43 @@ public class App {
           articles.remove(foundId);
           System.out.printf("%d번 게시물이 삭제되었습니다.\n",id);
         }
-      }else if(cmd.equals("system signup")){
-        System.out.print("아이디 : ");
-        String userId = sc.nextLine();
-        System.out.print("비밀번호 : ");
-        String password = sc.nextLine();
+      }else if(cmd.equals("member join")){
+        int id = users.size() + 1;
+        String regDate = Util.getNowDateStr();
+        String userId = null;
+        while(true) {
+          System.out.print("아이디 : ");
+          userId = sc.nextLine();
+
+          if(isJoinableLoginId(userId) == false){
+            System.out.println("중복 되는 아이디입니다. 다시 입력해주세요.");
+            continue;
+          }
+
+          break;
+        }
+
+        String password =null;
+        String passwordCk = null;
+        while(true){
+          System.out.print("비밀번호 : ");
+         password = sc.nextLine();
+          System.out.print("비밀번호 확인 : ");
+          passwordCk = sc.nextLine();
+          if (password.equals(passwordCk) == false) {
+            System.out.println("비밀번호를 다시 입력하세요.");
+            continue;
+          }
+          break;
+        }
         System.out.print("이름 : ");
         String nickname = sc.nextLine();
-        User newUser = new User(userId, password, nickname);
+
+        User newUser = new User(id ,userId, password, nickname, regDate);
         users.add(newUser);
-        for(User user : users){
-          System.out.printf("id : %d\n", user.id);
-          System.out.printf("아이디 : %s\n", user.userId);
-          System.out.printf("비밀번호 : %s\n", user.password);
-          System.out.printf("이름 : %s\n", user.nickname);
-        }
+
+        System.out.printf("%d번 회원 가입이 완료 되었습니다.\n",id);
+
       }else if(cmd.startsWith("article modify ")){
         String[] cmds = cmd.split(" ");
 
@@ -241,5 +263,14 @@ public class App {
     }else{
       return articles.get(idx);
     }
+  }
+
+  public boolean isJoinableLoginId(String userId){
+    for(User user : users){
+      if(user.userId.equals(userId)){
+        return false;
+      }
+    }
+    return true;
   }
 }

@@ -1,12 +1,9 @@
 package com.KoreaIT.java.AM.dto;
 
-public class Article{
-  public int id;
+public class Article extends Dto{
   public int viewCount;
   public String title;
   public String content;
-  public String regDate;
-
   public Article(int id, String title, String content, String regDate) {
     this(id, title, content, regDate, 0);
   }
