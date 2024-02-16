@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class App {
-  private static List<Article> articles;
-  static{
+  private List<Article> articles;
+  {
     articles = new ArrayList<>();
   }
   public  void start(){
@@ -103,7 +103,7 @@ public class App {
         }
 
         int id = Integer.parseInt(cmds[2]);
-        Article foundArticle = getArticlebyID(id);
+        int foundId = getArticleIndexById(id);
         /*for(int i =0; i< articles.size(); i++){
           if(articles.get(i).id == id){
             Article article = articles.get(i);
@@ -111,10 +111,10 @@ public class App {
             break;
           }
         }*/
-        if(foundArticle == null){
+        if(foundId == -1){
           System.out.printf("%d번 게시물은 존재하지 않습니다.\n",id);
         }else{
-          articles.remove(foundArticle);
+          articles.remove(foundId);
           System.out.printf("%d번 게시물이 삭제되었습니다.\n",id);
         }
       }else if(cmd.startsWith("article modify ")){
@@ -163,22 +163,45 @@ public class App {
     System.out.println("== 프로그램 종료 ==");
   }
 
-  private static void makeTestData() {
+  private void makeTestData() {
     System.out.println("게시글 테스트 데이터를 생성합니다.");
     articles.add(new Article(1,"t1","b1",Util.getNowDateStr(),11));
     articles.add(new Article(2,"t2","b2",Util.getNowDateStr(),12));
     articles.add(new Article(3,"t3","b3",Util.getNowDateStr(),436));
   }
 
-  public static Article getArticlebyID(int id) {
-    Article foundArticle = null;
-    for (int i = 0; i < articles.size(); i++) {
+  public int getArticleIndexById(int id){
+    int i = 0;
+
+    for(Article article : articles){
+      if(article.id == id){
+        return i;
+      }
+      i++;
+    }
+    return -1;
+  }
+
+  public Article getArticlebyID(int id) {
+    /*for (int i = 0; i < articles.size(); i++) {
       if (articles.get(i).id == id) {
         Article article = articles.get(i);
-        foundArticle = article;
-        break;
+        return article;
       }
+    }*/
+
+    // for-each문 변경
+    /*for(Article article : articles){
+      if(article.id == id){
+        return article;
+      }
+    }*/
+
+    int idx = getArticleIndexById(id);
+    if (idx == -1){
+      return null;
+    }else{
+      return articles.get(idx);
     }
-    return foundArticle;
   }
 }
