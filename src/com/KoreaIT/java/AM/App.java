@@ -1,6 +1,7 @@
 package com.KoreaIT.java.AM;
 
 import com.KoreaIT.java.AM.dto.Article;
+import com.KoreaIT.java.AM.dto.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +9,12 @@ import java.util.Scanner;
 
 public class App {
   private List<Article> articles;
-  {
+  private List<User> users;
+  public App(){
     articles = new ArrayList<>();
+    users = new ArrayList<>();
   }
-  public  void start(){
+  public void start(){
     System.out.println("== 프로그램 시작 ==");
     makeTestData();
 
@@ -30,18 +33,38 @@ public class App {
         break;
       }
 
-      if(cmd.equals("article list")) {
-        if(articles.size() == 0) {
-          System.out.println("게시글이 없습니다.");
-        }else{
-          System.out.print("번호 | ");
-          System.out.print("제목\n");
-          for(int i = articles.size() -1; i>=0; i--){
-            System.out.printf("%d | ",articles.get(i).id);
-            System.out.printf("%s \n",articles.get(i).title);
+      if(cmd.startsWith("article list")) {
+        if(cmd.equals("article list")) {
+          if(articles.size() == 0) {
+            System.out.println("게시글이 없습니다.");
+          }else{
+            System.out.print("번호 | ");
+            System.out.print("제목\n");
+            for(int i = articles.size() -1; i>=0; i--){
+              System.out.printf("%d | ",articles.get(i).id);
+              System.out.printf("%s \n",articles.get(i).title);
+            }
           }
+          continue;
         }
+          String search = cmd.substring("article list".length()).trim();
+          List<Article> forPrintArticles = new ArrayList<>();
+          for(Article article : articles){
+            if(article.title.contains(search)){
+              forPrintArticles.add(article);
+            }
+          }
 
+          if(forPrintArticles.size() == 0){
+            System.out.printf("%s 검색어와 일치하는 게시물이 없습니다.\n",search);
+          }else {
+            System.out.print("번호 | ");
+            System.out.print("제목\n");
+            for (Article article : forPrintArticles) {
+              System.out.printf("%d | ", article.id);
+              System.out.printf("%s \n", article.title);
+            }
+          }
       }else if(cmd.equals("article write")){
         int id = articles.size() + 1;
         String regDate = Util.getNowDateStr();
@@ -116,6 +139,21 @@ public class App {
         }else{
           articles.remove(foundId);
           System.out.printf("%d번 게시물이 삭제되었습니다.\n",id);
+        }
+      }else if(cmd.equals("system signup")){
+        System.out.print("아이디 : ");
+        String userId = sc.nextLine();
+        System.out.print("비밀번호 : ");
+        String password = sc.nextLine();
+        System.out.print("이름 : ");
+        String nickname = sc.nextLine();
+        User newUser = new User(userId, password, nickname);
+        users.add(newUser);
+        for(User user : users){
+          System.out.printf("id : %d\n", user.id);
+          System.out.printf("아이디 : %s\n", user.userId);
+          System.out.printf("비밀번호 : %s\n", user.password);
+          System.out.printf("이름 : %s\n", user.nickname);
         }
       }else if(cmd.startsWith("article modify ")){
         String[] cmds = cmd.split(" ");
